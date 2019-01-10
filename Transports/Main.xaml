@@ -1,0 +1,22 @@
+﻿<Window x:Class="Transports.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Transports"
+        mc:Ignorable="d"
+        Title="GESTIÓN DE TRASLADOS" Height="80" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="Images/Icon.ico">
+    <Grid>
+        <Menu FontSize="18" Height="35">
+            <MenuItem Header="Opciones" Height="35">
+                <MenuItem Header="_Traslados" Click="Traslates_Click"/>
+                <Separator/>
+                <MenuItem Header="_Clientes" Click="Customers_Click"/>
+                <Separator/>
+                <MenuItem Header="_Choferes" Click="Drivers_Click"/>
+                <Separator/>
+                <MenuItem Header="_Salir" Click="Exit_Click"/>
+            </MenuItem>
+        </Menu>
+    </Grid>
+</Window>

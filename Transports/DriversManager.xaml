@@ -1,0 +1,80 @@
+﻿<Window x:Class="Transports.DriversManager"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        mc:Ignorable="d"
+        Title="GESTIÓN DE CHOFERES" Width="320" WindowStartupLocation="CenterScreen" FontSize="15" Icon="Images/Icon.ico">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <CollectionViewSource x:Key="SortedDrivers" Source="{Binding Drivers}">
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="Name" Direction="Ascending" />
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".05*"/>
+            <RowDefinition Height=".9*"/>
+            <RowDefinition Height=".1*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="LISTADO DE CHOFERES" TextAlignment="Center" FontWeight="Bold"/>
+        <ListView Grid.Row="1" ItemsSource="{Binding Source={StaticResource SortedDrivers}}" HorizontalContentAlignment="Stretch" SelectedItem="{Binding DriverSelected}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="2" Margin="-3 0">
+                        <TextBlock Text="{Binding Name}" Margin="5 0 0 3"/>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Modificar" Command="{Binding ModifyCommand}"/>
+                    <MenuItem Header="Eliminar" Command="{Binding DeleteDriverCommand}"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
+        <Grid Grid.Row="2" Margin="0 8 0 8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".6*"/>
+                <ColumnDefinition Width=".4*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="1" Command="{Binding AddDriverCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images/add.ico" Height="18"/>
+                    <TextBlock Text="Agregar" FontWeight="Bold" Margin="5 0 0 0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <Grid Grid.RowSpan="3" Visibility="{Binding UpdateVisibility}" Background="LightGray">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".6*"/>
+                <ColumnDefinition Width=".4*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Row="1" Height="35" Text="{Binding DriverSelected.Name, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Row="1" Height="35" Grid.Column="1" Command="{Binding UpdateDriverCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images/icon-update.ico" Height="18"/>
+                    <TextBlock Text="Modificar" FontWeight="Bold" Margin="5 0 0 0"/>
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="1" Height="35" Grid.Column="1" VerticalAlignment="Bottom" Command="{Binding CancelCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images/cancel.ico" Height="18"/>
+                    <TextBlock Text="Cancelar" FontWeight="Bold" Margin="5 0 0 0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

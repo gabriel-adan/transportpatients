@@ -1,0 +1,162 @@
+﻿<Window x:Class="Transports.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:model="clr-namespace:Bussiness.Layer.Model;assembly=Bussiness.Layer"
+        xmlns:local="clr-namespace:Transports.Converters"
+        mc:Ignorable="d"
+        Title="ASIGNACIÓN DE TRASLADOS" WindowState="Maximized" FontSize="15" Icon="Images/Icon.ico">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Transports;component/Resources/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:HourVisibilityConverter x:Key="HourVisibilityConverter"/>
+            <ObjectDataProvider x:Key="DaysOfWeek" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="model:DaysOfWeek"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="65"/>
+            <ColumnDefinition Width=".9*"/>
+            <ColumnDefinition Width=".1*"/>
+        </Grid.ColumnDefinitions>
+        <ComboBox Grid.Column="3" ItemsSource="{Binding Source={StaticResource DaysOfWeek}}" SelectedValue="{Binding DayOfWeek}"/>
+
+        <DataGrid Background="White" Grid.Row="1" Grid.ColumnSpan="3" x:Name="CustomersGrid" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" ItemsSource="{Binding TransportRows}" SelectedValue="{Binding TransportRowSelected}">
+            <DataGrid.Columns>
+                <DataGridTextColumn IsReadOnly="True" Header="NOMBRE" Width="*" Binding="{Binding Transport.Customer.Name}"/>
+                <DataGridTextColumn IsReadOnly="True" Header="LUGAR" Width="*" Binding="{Binding Transport.Customer.Hour.Place}"/>
+                <DataGridTextColumn IsReadOnly="True" Header="HORA ENTRADA" Width="*" Binding="{Binding Transport.Customer.Hour.EntryTime, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="CHOFER" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox IsEnabled="{Binding IsCanceled}" DisplayMemberPath="Name" SelectedItem="{Binding EntryDriver, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding EntryIndex, Mode=TwoWay}"
+                            ItemsSource="{Binding Drivers}" SelectionChanged="ComboBox_Entry_SelectionChanged">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn IsReadOnly="True" Header="HORA SALIDA" Width="*" Binding="{Binding Transport.Customer.Hour.ExitTime, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="CHOFER" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox IsEnabled="{Binding IsCanceled}" DisplayMemberPath="Name" SelectedItem="{Binding ExitDriver, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding ExitIndex, Mode=TwoWay}"
+                            ItemsSource="{Binding Drivers}" SelectionChanged="ComboBox_Exit_SelectionChanged"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding Path=DataContext.CancelTransportCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}">
+                                <Image Source="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" Width="18"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RowState}" Value="0">
+                            <Setter Property="Background" Value="White"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RowState}" Value="1">
+                            <Setter Property="Background" Value="Yellow"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RowState}" Value="2">
+                            <Setter Property="Background" Value="#08fc4b"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RowState}" Value="3">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+
+        <ScrollViewer Background="White" Grid.Row="2" Grid.ColumnSpan="3">
+            <ItemsControl Background="White" ItemsSource="{Binding DriversTransports}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="5" CornerRadius="2">
+                            <StackPanel Margin="0 5">
+                                <TextBlock Text="{Binding Name}" TextAlignment="Center" FontWeight="Bold" Margin="0 0 0 5"/>
+                                <DataGrid ItemsSource="{Binding Transports}" SelectedValue="{Binding Path=DataContext.TransportSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" AutoGenerateColumns="False" CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn IsReadOnly="True" Width="*" Binding="{Binding Customer.Name}"/>
+                                        <DataGridTextColumn IsReadOnly="True" Width="*" Binding="{Binding Customer.Hour.Place}"/>
+                                        <DataGridTextColumn IsReadOnly="True" Width="*" Binding="{Binding EntryTime}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding EntryDriver, Converter={StaticResource HourVisibilityConverter}}" Value="false">
+                                                            <Setter Property="Visibility" Value="Hidden"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding EntryDriver, Converter={StaticResource HourVisibilityConverter}}" Value="true">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="TextAlignment" Value="Center"/>
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn IsReadOnly="True" Width="*" Binding="{Binding ExitTime}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ExitDriver, Converter={StaticResource HourVisibilityConverter}}" Value="false">
+                                                            <Setter Property="Visibility" Value="Hidden"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ExitDriver, Converter={StaticResource HourVisibilityConverter}}" Value="true">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="TextAlignment" Value="Center"/>
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                    <DataGrid.InputBindings>
+                                        <KeyBinding Command="{Binding Path=DataContext.DeleteTransportCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}" Key="Delete"/>
+                                    </DataGrid.InputBindings>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Window>
