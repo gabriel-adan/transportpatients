@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Bussiness.Layer.Model
@@ -17,7 +16,7 @@ namespace Bussiness.Layer.Model
                 OnNotifyPropertyChanged("Name");
             }
         }
-        public ICollection<Transport> Transports { get; set; }
+        public IList<Transport> Transports { get; set; }
 
         public Driver()
         {

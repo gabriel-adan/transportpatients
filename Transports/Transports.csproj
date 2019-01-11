@@ -131,6 +131,7 @@
     <Compile Include="ViewModel\ERowStates.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\TransportRow.cs" />
+    <Compile Include="ViewModel\TransportSortingByTime.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

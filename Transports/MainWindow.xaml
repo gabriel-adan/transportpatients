@@ -102,17 +102,17 @@
         </DataGrid>
 
         <ScrollViewer Background="White" Grid.Row="2" Grid.ColumnSpan="3">
-            <ItemsControl Background="White" ItemsSource="{Binding DriversTransports}">
+            <ItemsControl x:Name="ItemsControlPanel" Background="White" ItemsSource="{Binding DriversTransports}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="Black" BorderThickness="1" Margin="5" CornerRadius="2">
                             <StackPanel Margin="0 5">
                                 <TextBlock Text="{Binding Name}" TextAlignment="Center" FontWeight="Bold" Margin="0 0 0 5"/>
-                                <DataGrid ItemsSource="{Binding Transports}" SelectedValue="{Binding Path=DataContext.TransportSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" AutoGenerateColumns="False" CanUserAddRows="False">
+                                <DataGrid ItemsSource="{Binding Transports}" SelectedValue="{Binding Path=DataContext.TransportSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" AutoGenerateColumns="False" CanUserAddRows="False" Sorting="DataGrid_Sorting" Initialized="DataGrid_Initialized">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn IsReadOnly="True" Width="*" Binding="{Binding Customer.Name}"/>
                                         <DataGridTextColumn IsReadOnly="True" Width="*" Binding="{Binding Customer.Hour.Place}"/>
-                                        <DataGridTextColumn IsReadOnly="True" Width="*" Binding="{Binding EntryTime}">
+                                        <DataGridTextColumn IsReadOnly="True" Width="*" Binding="{Binding EntryTime}" SortMemberPath="EntryTime">
                                             <DataGridTextColumn.ElementStyle>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
