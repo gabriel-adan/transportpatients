@@ -33,7 +33,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contract\IRepository.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\Driver.cs" />
     <Compile Include="Model\EDaysOfWeek.cs" />

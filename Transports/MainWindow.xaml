@@ -67,7 +67,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox IsEnabled="{Binding IsCanceled}" DisplayMemberPath="Name" SelectedItem="{Binding ExitDriver, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding ExitIndex, Mode=TwoWay}"
-                            ItemsSource="{Binding Drivers}" SelectionChanged="ComboBox_Exit_SelectionChanged"/>
+                            ItemsSource="{Binding Drivers}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

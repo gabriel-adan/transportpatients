@@ -4,15 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{24AE7B63-649E-4C3C-8F6D-DC7AEE397850}</ProjectGuid>
+    <ProjectGuid>{7EB260DE-FBF6-43DA-9DC6-0E8042EDACF9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Data.Layer</RootNamespace>
-    <AssemblyName>Data.Layer</AssemblyName>
+    <RootNamespace>Bussiness.Layer</RootNamespace>
+    <AssemblyName>Business.Layer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,25 +31,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Data.SQLite.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contract\Customer.cs" />
+    <Compile Include="Contract\DayOfWeek.cs" />
+    <Compile Include="Contract\Hour.cs" />
+    <Compile Include="Contract\IHourRepository.cs" />
+    <Compile Include="Contract\IRepository.cs" />
+    <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\Driver.cs" />
+    <Compile Include="Model\EDaysOfWeek.cs" />
+    <Compile Include="Model\Hour.cs" />
+    <Compile Include="Model\NotifyPropertyChanged.cs" />
+    <Compile Include="Model\Transport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\Context.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bussiness.Layer\Bussiness.Layer.csproj">
-      <Project>{7eb260de-fbf6-43da-9dc6-0e8042edacf9}</Project>
-      <Name>Bussiness.Layer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Logger.Layer\Logger.Layer.csproj">
-      <Project>{06844929-e2e3-4e79-a239-644468f47199}</Project>
-      <Name>Logger.Layer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
