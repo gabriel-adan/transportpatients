@@ -27,6 +27,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition/>
+            <RowDefinition Height="3"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -47,7 +48,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Header="CHOFER" Width="80">
+                <DataGridTemplateColumn IsReadOnly="True" Header="CHOFER" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox IsEnabled="{Binding IsCanceled}" DisplayMemberPath="Name" SelectedItem="{Binding EntryDriver, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding EntryIndex, Mode=TwoWay}"
@@ -63,15 +64,15 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Header="CHOFER" Width="80">
+                <DataGridTemplateColumn IsReadOnly="True" Header="CHOFER" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox IsEnabled="{Binding IsCanceled}" DisplayMemberPath="Name" SelectedItem="{Binding ExitDriver, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding ExitIndex, Mode=TwoWay}"
-                            ItemsSource="{Binding Drivers}"/>
+                            ItemsSource="{Binding Drivers}" SelectionChanged="ComboBox_Exit_SelectionChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="30">
+                <DataGridTemplateColumn IsReadOnly="True" Width="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Command="{Binding Path=DataContext.CancelTransportCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}">
@@ -101,7 +102,9 @@
             </DataGrid.RowStyle>
         </DataGrid>
 
-        <ScrollViewer Background="White" Grid.Row="2" Grid.ColumnSpan="3">
+        <GridSplitter Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Background="Gray"/>
+
+        <ScrollViewer Background="White" Grid.Row="3" Grid.ColumnSpan="3">
             <ItemsControl x:Name="ItemsControlPanel" Background="White" ItemsSource="{Binding DriversTransports}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

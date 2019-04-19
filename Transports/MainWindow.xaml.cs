@@ -38,11 +38,14 @@ namespace Transports
         {
             try
             {
-                Driver driver = (sender as ComboBox).SelectedValue as Driver;
-                TransportRow transportRow = CustomersGrid.SelectedValue as TransportRow;
-                if (transportRow != null && transportRow.EntryDriver != null)
+                if (((ComboBox)sender).IsDropDownOpen)
                 {
-                    mainViewModel.AddEntryTransport(driver, transportRow.Transport.Customer);
+                    Driver driver = (sender as ComboBox).SelectedValue as Driver;
+                    TransportRow transportRow = CustomersGrid.SelectedValue as TransportRow;
+                    if (transportRow != null && transportRow.EntryDriver != null)
+                    {
+                        mainViewModel.AddEntryTransport(driver, transportRow.Transport.Customer);
+                    }
                 }
             }
             catch (Exception ex)
@@ -55,11 +58,14 @@ namespace Transports
         {
             try
             {
-                Driver driver = (sender as ComboBox).SelectedValue as Driver;
-                TransportRow transportRow = CustomersGrid.SelectedValue as TransportRow;
-                if (transportRow != null && transportRow.ExitDriver != null)
+                if (((ComboBox)sender).IsDropDownOpen)
                 {
-                    mainViewModel.AddExitTransport(driver, transportRow.Transport.Customer);
+                    Driver driver = (sender as ComboBox).SelectedValue as Driver;
+                    TransportRow transportRow = CustomersGrid.SelectedValue as TransportRow;
+                    if (transportRow != null && transportRow.ExitDriver != null)
+                    {
+                        mainViewModel.AddExitTransport(driver, transportRow.Transport.Customer);
+                    }
                 }
             }
             catch (Exception ex)
