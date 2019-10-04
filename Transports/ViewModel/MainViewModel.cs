@@ -67,6 +67,15 @@ namespace Transports.ViewModel
                     Driver entry = row.Transport.EntryDriver;
                     Driver exit = row.Transport.ExitDriver;
                     row.IsCanceled = row.IsCanceled ? true : false;
+                    if (row.IsCanceled)
+                    {
+                        InitialCount++;
+                    }
+                    else
+                    {
+                        InitialCount--;
+                        IncompletedCount = TransportRows.Where(t => t.RowState == ERowStates.INCOMPLETED).ToList().Count;
+                    }
                     if (!Context.UpdateTransport(row.Transport))
                     {
                         row.IsCanceled = false;
@@ -130,6 +139,28 @@ namespace Transports.ViewModel
             }
         }
 
+        private int _initialCount;
+        public int InitialCount
+        {
+            get { return _initialCount; }
+            private set
+            {
+                _initialCount = value;
+                NotifyPropertyChanged("InitialCount");
+            }
+        }
+
+        private int _incompletedCount;
+        public int IncompletedCount
+        {
+            get { return _incompletedCount; }
+            private set
+            {
+                _incompletedCount = value;
+                NotifyPropertyChanged("IncompletedCount");
+            }
+        }
+
         private ObservableCollection<Driver> _drivers;
 
         private DaysOfWeek _dayOfWeek;
@@ -147,6 +178,25 @@ namespace Transports.ViewModel
                 var transports = Context.GetCustomersTransportsByDayOfWeek(value);
                 foreach (Transport transport in transports)
                 {
+                    if (!transport.IsCanceled)
+                    {
+                        if (transport.EntryDriver == null && transport.ExitDriver == null)
+                        {
+                            InitialCount++;
+                        }
+                        else
+                        {
+                            if (transport.EntryDriver != null && transport.ExitDriver == null)
+                            {
+                                IncompletedCount++;
+                            }
+
+                            if (transport.EntryDriver == null && transport.ExitDriver != null)
+                            {
+                                IncompletedCount++;
+                            }
+                        }
+                    }
                     TransportRows.Add(new TransportRow() { Transport = transport, Drivers = _drivers, EntryDriver = (!transport.IsCanceled) ? transport.EntryDriver : null, ExitDriver = (!transport.IsCanceled) ? transport.ExitDriver : null, IsCanceled = transport.IsCanceled });
                 }
                 foreach (Driver driver in _drivers)
@@ -200,6 +250,15 @@ namespace Transports.ViewModel
 
                 if (Context.UpdateTransport(transport))
                 {
+                    if (transport.ExitDriver == null)
+                    {
+                        IncompletedCount++;
+                    }
+                    else
+                    {
+                        IncompletedCount--;
+                    }
+
                     if (DriversTransports.Contains(driver))
                     {
                         Transport tr = driver.Transports.Where(t => (t.Customer.Hour.EntryTime.Equals(customer.Hour.EntryTime) && t.Customer.Hour.ExitTime.Equals(customer.Hour.ExitTime))).FirstOrDefault();
@@ -307,6 +366,15 @@ namespace Transports.ViewModel
 
                 if (Context.UpdateTransport(transport))
                 {
+                    if (transport.EntryDriver == null)
+                    {
+                        IncompletedCount++;
+                    }
+                    else
+                    {
+                        IncompletedCount--;
+                    }
+
                     if (DriversTransports.Contains(driver))
                     {
                         Transport tr = driver.Transports.Where(t => (t.Customer.Hour.EntryTime.Equals(customer.Hour.EntryTime) && t.Customer.Hour.ExitTime.Equals(customer.Hour.ExitTime))).FirstOrDefault();

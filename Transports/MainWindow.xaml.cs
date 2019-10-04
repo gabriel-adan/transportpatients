@@ -19,6 +19,8 @@ namespace Transports
         public MainWindow()
         {
             InitializeComponent();
+            Height = SystemParameters.WorkArea.Height;
+            Width = SystemParameters.WorkArea.Width - (SystemParameters.WorkArea.Width * .05);
             try
             {
                 mainViewModel = new MainViewModel(Settings.Default.ConnectionString);
